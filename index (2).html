@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-Rise Summer Festival - e-Rise Matsuri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+
+<!--
+  ================================================================
+  📖 HOW TO EDIT THIS PAGE (read this first!)
+  ================================================================
+  Almost everything you'd want to change lives in the <script> at the
+  very bottom of this file, inside clearly-labeled blocks:
+
+    LANG    -> every piece of text, in English AND Japanese
+    GAMES   -> one entry per game card. Copy a block to add a new game.
+    MEDIA   -> your photo/video gallery. Copy a block to add a photo,
+               a YouTube video, or an uploaded video file.
+    CONTACT -> address / phone / email / website / enroll link
+
+  You will basically never need to touch the HTML or CSS below to make
+  normal updates - just edit those 4 blocks. Search this file for
+  "✏️ EASY PERSONALIZATION" to jump straight there.
+  ================================================================
+-->
+
+<style>
+  /* ============================================================
+     🎨 THE e-RISE FESTIVAL PALETTE
+     This is the same color scheme used across all 6 games, so the
+     whole festival feels like one connected experience. Change these
+     and everything on the page (buttons, glows, cards) updates too.
+     ============================================================ */
+  :root{
+    --sky-top:#2d1b4e;      /* night sky, top */
+    --sky-mid:#5b2a5e;      /* night sky, middle */
+    --sky-glow:#c9612f;     /* warm horizon glow */
+    --lantern:#e8425a;      /* red lantern / primary accent */
+    --lantern-dark:#a13245;
+    --gold:#ffb833;         /* gold accent */
+    --gold-light:#ffe066;
+    --teal:#2fc4b2;         /* teal accent */
+    --teal-dark:#1a8577;
+    --pink:#ff6fa5;         /* pink accent */
+    --pink-dark:#d94d84;
+    --cream:#faf3e3;        /* card background */
+    --ink:#242238;          /* body text on light cards */
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Nunito',sans-serif;
+    background:linear-gradient(180deg,var(--sky-top) 0%, var(--sky-mid) 40%, #7a3a52 70%, var(--sky-glow) 100%);
+    color:var(--cream);
+    position:relative;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+
+  /* ---------------- Ambient decoration (purely visual, ignore this) ---------------- */
+  #stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .star{position:absolute;background:#fff;border-radius:50%;opacity:.55;animation:twinkle 3s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:.8;}}
+
+  #bokeh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .glow{position:absolute;border-radius:50%;filter:blur(34px);opacity:.3;}
+
+  #floaters{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .floater{position:absolute;bottom:-40px;font-size:1.6rem;opacity:.55;animation:floatUp linear infinite;}
+  @keyframes floatUp{
+    0%{transform:translateY(0) rotate(0deg);opacity:0;}
+    10%{opacity:.55;}
+    90%{opacity:.55;}
+    100%{transform:translateY(-115vh) rotate(25deg);opacity:0;}
+  }
+
+  #lanterns{position:absolute;top:67px;left:0;width:100%;display:flex;justify-content:space-around;z-index:1;pointer-events:none;}
+  .lantern{width:32px;height:42px;border-radius:50% 50% 45% 45%;position:relative;box-shadow:0 0 16px 3px rgba(255,184,51,.5);animation:sway 3.4s ease-in-out infinite;}
+  .lantern:nth-child(4n+1){background:radial-gradient(circle at 35% 30%, #ff8f8f, var(--lantern) 60%, var(--lantern-dark));animation-delay:.2s;}
+  .lantern:nth-child(4n+2){background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, #c9822a);animation-delay:.5s;}
+  .lantern:nth-child(4n+3){background:radial-gradient(circle at 35% 30%, #7fe8db, var(--teal) 60%, var(--teal-dark));animation-delay:.1s;}
+  .lantern:nth-child(4n+4){background:radial-gradient(circle at 35% 30%, #ffb0cf, var(--pink) 60%, var(--pink-dark));animation-delay:.35s;}
+  .lantern::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:2px;height:8px;background:#7a5b3a;}
+  .lantern::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:10px;height:4px;background:#7a5b3a;border-radius:2px;}
+  @keyframes sway{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+
+  /* Bunting flag garland - a festival classic! */
+  #bunting{display:flex;justify-content:center;gap:0;margin:6px 0 0;transform:translateY(2px);}
+  .flag{width:26px;height:32px;clip-path:polygon(0 0, 100% 0, 50% 100%);animation:flagSway 2.6s ease-in-out infinite;}
+  .flag:nth-child(6n+1){background:var(--lantern);}
+  .flag:nth-child(6n+2){background:var(--gold);}
+  .flag:nth-child(6n+3){background:var(--teal);}
+  .flag:nth-child(6n+4){background:var(--pink);}
+  .flag:nth-child(6n+5){background:var(--gold-light);}
+  .flag:nth-child(6n+6){background:#8e6bb0;}
+  @keyframes flagSway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+
+  /* Wavy section divider */
+  .wave-divider{display:block;width:100%;height:60px;margin-top:-2px;}
+
+  .wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  /* ---------------- Top bar ---------------- */
+  #topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0;gap:14px;flex-wrap:wrap;}
+  #logo{display:flex;align-items:center;gap:10px;font-family:'Baloo 2',cursive;font-weight:800;font-size:1.3rem;color:var(--gold-light);}
+  #logo .emoji{font-size:1.6rem;}
+  #logo img{height:36px;width:auto;border-radius:8px;} /* use this if you add a logo image instead of an emoji */
+  #topbar-actions{display:flex;align-items:center;gap:10px;}
+
+  .btn{
+    font-family:'Baloo 2',cursive;font-weight:700;font-size:1rem;
+    padding:10px 22px;border:none;border-radius:50px;cursor:pointer;text-decoration:none;
+    display:inline-block;color:#fff;
+    background:linear-gradient(180deg, var(--lantern), var(--lantern-dark));
+    box-shadow:0 5px 0 #7c2434, 0 8px 16px rgba(0,0,0,.3);
+    transition:transform .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px) scale(1.03);}
+  .btn:active{transform:translateY(3px);box-shadow:0 2px 0 #7c2434;}
+  .btn.gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));box-shadow:0 5px 0 #a8781c,0 8px 16px rgba(0,0,0,.3);color:#4a3300;}
+  .btn.small{padding:8px 18px;font-size:.9rem;}
+  .btn.ghost-pill{background:rgba(0,0,0,.3);box-shadow:none;border:1px solid rgba(255,184,51,.5);color:var(--gold-light);}
+
+  /* ---------------- Hero ---------------- */
+  #hero{text-align:center;padding:90px 0 50px;position:relative;}
+  #hero .hero-emoji-left, #hero .hero-emoji-right{position:absolute;top:30px;font-size:2.6rem;opacity:.85;animation:sway 3s ease-in-out infinite;}
+  #hero .hero-emoji-left{left:0;}
+  #hero .hero-emoji-right{right:0;}
+  #hero .kicker{
+    display:inline-block;background:rgba(0,0,0,.3);border:1px solid rgba(255,184,51,.5);
+    color:var(--gold-light);font-weight:800;font-family:'Baloo 2',cursive;
+    padding:6px 18px;border-radius:30px;font-size:.9rem;margin-bottom:18px;letter-spacing:.5px;
+  }
+  #hero h1{
+    font-size:clamp(2.4rem,7vw,4.6rem);font-weight:800;margin:0 0 6px;
+    color:var(--gold-light);text-shadow:0 3px 0 var(--lantern-dark), 0 10px 24px rgba(0,0,0,.45);
+    letter-spacing:1px;
+  }
+  #hero .jp{font-size:clamp(1.1rem,2.6vw,1.6rem);opacity:.9;margin:0 0 20px;font-weight:700;}
+  #hero p.tagline{font-size:clamp(1rem,2.2vw,1.3rem);max-width:580px;margin:0 auto 30px;opacity:.95;line-height:1.55;font-weight:700;}
+  #hero .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  .section-title{text-align:center;margin:0 0 8px;font-size:clamp(1.7rem,4vw,2.4rem);color:var(--gold-light);}
+  .section-sub{text-align:center;opacity:.9;margin:0 0 30px;font-size:1.05rem;font-weight:700;}
+  .mode-title{
+    text-align:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:1.3rem;
+    margin:34px 0 18px;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .mode-title .pill{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.25);padding:4px 16px;border-radius:20px;font-size:1.1rem;}
+
+  /* ---------------- Game cards (built from the GAMES array in JS) ---------------- */
+  #games{padding:20px 0 60px;}
+  .game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;}
+  .game-card{
+    background:linear-gradient(180deg, rgba(250,243,227,.98), rgba(240,228,200,.98));
+    color:var(--ink);border-radius:24px;padding:26px 22px;text-align:center;
+    box-shadow:0 16px 34px rgba(0,0,0,.35);position:relative;overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .game-card:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 22px 44px rgba(0,0,0,.4);}
+  .game-card .ribbon{
+    position:absolute;top:14px;right:-34px;transform:rotate(40deg);
+    color:#fff;font-family:'Baloo 2',cursive;font-weight:700;
+    font-size:.72rem;padding:4px 40px;box-shadow:0 3px 6px rgba(0,0,0,.3);
+  }
+  .game-card .icon{font-size:3.2rem;margin-bottom:8px;}
+  .game-card h3{margin:0 0 8px;font-size:1.25rem;}
+  .game-card p{font-size:.92rem;line-height:1.5;opacity:.85;margin:0 0 16px;min-height:60px;}
+  .game-card .btn{width:100%;color:#fff;}
+
+  /* ---------------- About ---------------- */
+  #about{padding:20px 0 60px;}
+  .about-card{
+    background:rgba(0,0,0,.28);border:1px solid rgba(255,184,51,.3);
+    border-radius:24px;padding:36px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;
+  }
+  .about-card .about-text h2{margin-top:0;color:var(--gold-light);}
+  .about-card .about-text p{line-height:1.6;opacity:.92;}
+  .feature-list{list-style:none;padding:0;margin:18px 0 24px;}
+  .feature-list li{padding:8px 0;display:flex;gap:10px;align-items:flex-start;}
+  .feature-list li .tick{color:var(--gold-light);font-weight:800;}
+  .about-photo{
+    background:linear-gradient(135deg, rgba(255,184,51,.25), rgba(232,66,90,.25));
+    border-radius:18px;min-height:220px;display:flex;align-items:center;justify-content:center;
+    font-size:4rem;border:2px dashed rgba(255,184,51,.5);overflow:hidden;
+  }
+  .about-photo img{width:100%;height:100%;object-fit:cover;}
+  @media (max-width:760px){ .about-card{grid-template-columns:1fr;} }
+
+  /* ---------------- Media gallery: photos, posters, videos (built from MEDIA array) ---------------- */
+  #gallery{padding:10px 0 60px;}
+  .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+  .media-item{border-radius:16px;overflow:hidden;background:rgba(0,0,0,.25);border:1px solid rgba(255,184,51,.25);}
+  .media-frame{
+    aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg, rgba(255,184,51,.18), rgba(47,196,178,.18));
+    border-bottom:2px dashed rgba(255,184,51,.4);font-size:2.2rem;color:rgba(250,243,227,.6);
+  }
+  .media-frame img, .media-frame video{width:100%;height:100%;object-fit:cover;}
+  .media-frame iframe{width:100%;height:100%;border:0;}
+  .media-caption{padding:10px 14px;font-size:.9rem;opacity:.85;}
+
+  /* ---------------- Contact / Footer ---------------- */
+  #contact{padding:20px 0 40px;text-align:center;}
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;max-width:760px;margin:30px auto 0;}
+  .contact-item{background:rgba(0,0,0,.28);border-radius:16px;padding:18px;border:1px solid rgba(255,184,51,.25);}
+  .contact-item .label{font-family:'Baloo 2',cursive;color:var(--gold-light);font-weight:700;font-size:.85rem;margin-bottom:4px;}
+  .contact-item .value{font-size:.98rem;opacity:.92;}
+  .social-row{display:flex;justify-content:center;gap:14px;margin-top:26px;}
+  .social-row a{
+    width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.3);border:1px solid rgba(255,184,51,.35);
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;text-decoration:none;
+    transition:transform .15s ease;
+  }
+  .social-row a:hover{transform:translateY(-3px) scale(1.08);}
+
+  .qr-box{
+    margin:34px auto 0;max-width:200px;background:var(--cream);color:var(--ink);border-radius:16px;
+    padding:16px;text-align:center;box-shadow:0 10px 24px rgba(0,0,0,.35);
+  }
+  .qr-box .qr-placeholder{
+    width:100%;aspect-ratio:1/1;border:2px dashed #c9b183;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:.8rem;color:#7a6a4a;padding:10px;text-align:center;
+  }
+  .qr-box .qr-label{font-family:'Baloo 2',cursive;font-weight:700;margin-top:8px;font-size:.85rem;}
+
+  footer{text-align:center;padding:26px 0 40px;opacity:.7;font-size:.85rem;}
+
+  @media (max-width:600px){
+    #topbar{flex-direction:column;gap:14px;}
+    #hero .hero-emoji-left, #hero .hero-emoji-right{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="bokeh"></div>
+<div id="floaters"></div>
+
+<div class="wrap">
+  <div id="lanterns">
+    <div class="lantern"></div><div class="lantern"></div><div class="lantern"></div>
+    <div class="lantern"></div><div class="lantern"></div><div class="lantern"></div>
+    <div class="lantern"></div>
+  </div>
+
+  <!-- ================= SECTION: TOP BAR ================= -->
+  <div id="topbar">
+    <div id="logo">
+      <!-- Replace the emoji span with <img src="your-logo.png" alt="Logo"> if you have a logo file -->
+      <span class="emoji" id="logoEmoji">🏮</span>
+      <span id="schoolNameText">e-Rise Eikaiwa</span>
+    </div>
+    <div id="topbar-actions">
+      <button class="btn ghost-pill small" id="langToggleBtn" onclick="toggleLang()">日本語</button>
+      <a class="btn gold small" id="enrollBtnTop" href="#">Enroll Today</a>
+    </div>
+  </div>
+
+  <!-- Festival bunting garland, purely decorative -->
+  <div id="bunting">
+    <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
+    <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
+    <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
+    <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
+  </div>
+
+  <!-- ================= SECTION: HERO ================= -->
+  <div id="hero">
+    <span class="hero-emoji-left">🎆</span>
+    <span class="hero-emoji-right">🎇</span>
+    <div class="kicker" data-i18n="kicker">🎏 Summer Festival Special 🎏</div>
+    <h1 data-i18n="festivalName">e-Rise Summer Festival</h1>
+    <div class="jp" data-i18n="japaneseName">e-Rise 夏祭り</div>
+    <p class="tagline" data-i18n="tagline">Play traditional matsuri games while practicing real English!</p>
+    <div class="hero-actions">
+      <a class="btn gold" href="#games" data-i18n="playGamesBtn">🎮 Play the Games</a>
+      <a class="btn" id="enrollBtnHero" href="#" data-i18n="learnBtn">🏫 Learn About e-Rise</a>
+    </div>
+  </div>
+
+  <!-- ================= SECTION: GAMES (cards are generated from the GAMES array in JS) ================= -->
+  <div id="games">
+    <h2 class="section-title" data-i18n="gamesTitle">Choose Your Game</h2>
+    <p class="section-sub" data-i18n="gamesSub">Play all six!</p>
+
+    <div class="mode-title"><span class="pill">⌨️</span><span data-i18n="typeModeTitle">Typing Challenge</span></div>
+    <div class="game-grid" id="gameGridType"><!-- filled in by JS --></div>
+
+    <div class="mode-title"><span class="pill">👆</span><span data-i18n="choiceModeTitle">Tap &amp; Play</span></div>
+    <div class="game-grid" id="gameGridChoice"><!-- filled in by JS --></div>
+  </div>
+
+  <svg class="wave-divider" viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 C300,70 900,-10 1200,30 L1200,60 L0,60 Z" fill="rgba(0,0,0,0.18)"></path></svg>
+
+  <!-- ================= SECTION: ABOUT ================= -->
+  <div id="about">
+    <h2 class="section-title" data-i18n="aboutSectionTitle">About Our School</h2>
+    <p class="section-sub" data-i18n="aboutSectionSub">Why families choose us</p>
+    <div class="about-card">
+      <div class="about-text">
+        <h2 data-i18n="aboutTitle">English + Programming, together</h2>
+        <p data-i18n="aboutBody">About text goes here.</p>
+        <!-- 👉 To add another paragraph, just add a new <p> tag here (plain text is fine,
+             or add a new key to LANG.en / LANG.jp below and use data-i18n="yourKey"). -->
+        <ul class="feature-list" id="featureList"><!-- filled in by JS --></ul>
+        <a class="btn gold" id="enrollBtnAbout" href="#" data-i18n="enrollBtn">Enroll Now</a>
+      </div>
+      <!-- Swap this placeholder for an <img src="your-photo.jpg"> of your classroom or students -->
+      <div class="about-photo" id="aboutPhotoSlot">🏫✨</div>
+    </div>
+  </div>
+
+  <!-- ================= SECTION: MEDIA GALLERY (built from the MEDIA array in JS) ================= -->
+  <div id="gallery">
+    <h2 class="section-title" data-i18n="galleryTitle">Festival Moments</h2>
+    <p class="section-sub" data-i18n="gallerySub">Add your own photos and videos here!</p>
+    <div class="media-grid" id="mediaGrid"><!-- filled in by JS --></div>
+  </div>
+
+  <!-- ================= SECTION: CONTACT ================= -->
+  <div id="contact">
+    <h2 class="section-title" data-i18n="contactTitle">Visit Us at the Festival</h2>
+    <p class="section-sub" data-i18n="contactSub">Or reach out any time</p>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="label" id="addressLabel">📍 Address</div>
+        <div class="value" id="addressValue">—</div>
+      </div>
+      <div class="contact-item">
+        <div class="label" id="phoneLabel">📞 Phone</div>
+        <div class="value" id="phoneValue">—</div>
+      </div>
+      <div class="contact-item">
+        <div class="label" id="emailLabel">✉️ Email</div>
+        <div class="value" id="emailValue">—</div>
+      </div>
+      <div class="contact-item">
+        <div class="label" id="websiteLabel">🌐 Website</div>
+        <div class="value" id="websiteValue">—</div>
+      </div>
+    </div>
+
+    <div class="social-row" id="socialRow"><!-- filled in by JS from SOCIAL --></div>
+
+    <!-- Print a real QR code (linking to this page once it's hosted online) and place it here,
+         or use any free QR generator after you have your final URL. -->
+    <div class="qr-box">
+      <div class="qr-placeholder" data-i18n="qrPlaceholder">Print &amp; place your festival QR code here</div>
+      <div class="qr-label" data-i18n="qrLabel">📱 Scan to Play!</div>
+    </div>
+  </div>
+
+  <footer data-i18n="footerText">© 2026 e-Rise Eikaiwa</footer>
+</div>
+
+<script>
+/* ================================================================
+   ✏️ EASY PERSONALIZATION — everything you'll want to edit lives
+   in the blocks below: LANG, GAMES, MEDIA, CONTACT.
+   Nothing below "RENDER ENGINE" needs to be touched.
+   ================================================================ */
+
+/* ---- 1. TEXT, IN BOTH LANGUAGES ----
+   Every key here matches a data-i18n="..." attribute in the HTML above.
+   To add a new language, copy the "en" block, translate it, rename it,
+   and add a case for it near toggleLang() below. */
+const LANG = {
+  en: {
+    langButton: "日本語",
+    kicker: "🎏 Summer Festival Special 🎏",
+    festivalName: "e-Rise Summer Festival",
+    japaneseName: "e-Rise 夏祭り",
+    tagline: "Come play, listen, and level up your English the FUN way — traditional matsuri games, e-Rise style! 🎉",
+    playGamesBtn: "🎮 Play the Games",
+    learnBtn: "🏫 Learn About e-Rise",
+    enrollBtn: "Enroll Now",
+    enrollBtnTop: "Enroll Today",
+    gamesTitle: "Choose Your Game",
+    gamesSub: "Every game teaches the same fun English words through Colors, Animals, and Food — try them all!",
+    typeModeTitle: "Typing Challenge — for kids who love to type!",
+    choiceModeTitle: "Tap & Play — easy picture matching, no typing needed!",
+    playNow: "Play Now ➜",
+    aboutSectionTitle: "About Our School",
+    aboutSectionSub: "Why families choose us",
+    aboutTitle: "English + Programming, together",
+    aboutBody: "Our teachers spent eight years teaching English conversation at Eishunjuku, a prep school in Makino. To offer an even more advanced English education, we opened e-Rise in Kuzuha — combining the strengths of English-conversation teaching and exam-prep methodology for your child.",
+    features: [
+      "Phonics, for preschoolers through junior high schoolers",
+      "Speaking & Listening built around real conversation",
+      "Reading & Writing with a strong grammar foundation",
+      "Eiken® test preparation, Grades 5 through 2"
+    ],
+    galleryTitle: "Festival Moments",
+    gallerySub: "Add your own photos and videos here — see the code comments!",
+    contactTitle: "Visit Us at the Festival",
+    contactSub: "Or reach out any time",
+    addressLabel: "📍 Address",
+    phoneLabel: "📞 Phone",
+    emailLabel: "✉️ Email",
+    websiteLabel: "🌐 Website",
+    qrLabel: "📱 Scan to Play!",
+    qrPlaceholder: "Print & place your festival QR code here",
+    footerText: "© 2026 e-Rise Eikaiwa — Made with care for the e-Rise Summer Festival"
+  },
+  jp: {
+    langButton: "English",
+    kicker: "🎏 サマーフェスティバル特別企画 🎏",
+    festivalName: "e-Rise サマーフェスティバル",
+    japaneseName: "e-Rise 夏祭り",
+    tagline: "遊んで、聞いて、楽しく英語力アップ！伝統的なお祭りゲームをe-Rise流で楽しもう！🎉",
+    playGamesBtn: "🎮 ゲームで遊ぶ",
+    learnBtn: "🏫 e-Riseについて",
+    enrollBtn: "今すぐ入会する",
+    enrollBtnTop: "入会案内",
+    gamesTitle: "ゲームを選ぼう",
+    gamesSub: "どのゲームも「色」「動物」「食べ物」の楽しい英単語で遊べます。ぜんぶ挑戦してみよう！",
+    typeModeTitle: "タイピングチャレンジ — タイピングが好きな子に！",
+    choiceModeTitle: "タップして遊ぼう — タイピング不要、絵合わせで簡単！",
+    playNow: "遊んでみる ➜",
+    aboutSectionTitle: "当校について",
+    aboutSectionSub: "選ばれる理由",
+    aboutTitle: "英会話とプログラミングを、ひとつに",
+    aboutBody: "私たちは牧野の進学塾「英駿塾」にて8年間、英会話を指導してまいりました。より高度な英語教育を提供するため、楠葉にe-Riseを開校。英会話と進学塾指導、それぞれの強みを組み合わせた英語教育をお子様に提供しています。",
+    features: [
+      "フォニックス：幼児から中学生まで対応",
+      "実践的な会話力を養うスピーキング＆リスニング",
+      "文法の土台をしっかり作るリーディング＆ライティング",
+      "英検®対策：5級〜準2級"
+    ],
+    galleryTitle: "お祭りの思い出",
+    gallerySub: "ここに写真や動画を追加できます — コード内のコメントをご覧ください",
+    contactTitle: "お祭り会場でお待ちしています",
+    contactSub: "お気軽にお問い合わせください",
+    addressLabel: "📍 住所",
+    phoneLabel: "📞 電話番号",
+    emailLabel: "✉️ メール",
+    websiteLabel: "🌐 ウェブサイト",
+    qrLabel: "📱 スキャンして遊ぶ！",
+    qrPlaceholder: "ここにお祭り用QRコードを印刷して貼ってください",
+    footerText: "© 2026 e-Rise イーライズ — e-Riseサマーフェスティバルのために心を込めて制作"
+  }
+};
+
+/* ---- 2. GAMES ----
+   👉 TO ADD A NEW GAME: copy one whole { ... } block below, paste it
+   as a new item, and edit its fields. The card, ribbon, and button
+   appear automatically — no HTML or CSS editing needed.
+   "mode" must be "type" (typing challenge) or "choice" (tap & play) —
+   this decides which row the card lands in.
+   "accent" can be any CSS color (hex code, "var(--gold)", etc.) — the
+   button and ribbon colors are generated from it automatically. */
+const GAMES = [
+  {
+    mode: "type", icon: "🎯", link: "e-rise-wanage-game.html", accent: "var(--lantern)",
+    ribbon: { en: "NEW", jp: "新登場" },
+    title: { en: "e-Rise Wanage Game", jp: "e-Rise 輪投げゲーム" },
+    desc: { en: "Type the word before time runs out to toss your ring and win the prize!", jp: "制限時間内に単語をタイプして輪を投げよう！" }
+  },
+  {
+    mode: "type", icon: "🎣", link: "e-rise-fishing-game.html", accent: "var(--teal)",
+    ribbon: { en: "FUN", jp: "人気" },
+    title: { en: "e-Rise Fishing Game", jp: "e-Rise 魚釣りゲーム" },
+    desc: { en: "Cast your line into the festival pond and type fast to reel in your catch!", jp: "お祭りの池に釣り糸を垂らそう！素早くタイプして釣り上げよう。" }
+  },
+  {
+    mode: "type", icon: "🔫", link: "e-rise-shooting-game.html", accent: "var(--gold)",
+    ribbon: { en: "POPULAR", jp: "大人気" },
+    title: { en: "e-Rise Target Shooting", jp: "e-Rise 射的ゲーム" },
+    desc: { en: "Finish typing the word in time to fire your shot and knock down the target!", jp: "制限時間内にタイプを終えて発射し、的を落とそう。" }
+  },
+  {
+    mode: "choice", icon: "🎯", link: "e-rise-wanage-choice-game.html", accent: "var(--pink)",
+    ribbon: { en: "EASY", jp: "かんたん" },
+    title: { en: "Wanage — Tap & Play", jp: "輪投げ — タップ版" },
+    desc: { en: "Listen to the word, then tap the matching target to toss your ring. No typing!", jp: "単語を聞いて、合う的をタップして輪を投げよう。タイピング不要！" }
+  },
+  {
+    mode: "choice", icon: "🎣", link: "e-rise-fishing-choice-game.html", accent: "var(--teal-dark)",
+    ribbon: { en: "EASY", jp: "かんたん" },
+    title: { en: "Fishing — Tap & Play", jp: "魚釣り — タップ版" },
+    desc: { en: "Listen to the word, then tap the matching catch to drop your hook. No typing!", jp: "単語を聞いて、合う獲物をタップしてフックを落とそう。タイピング不要！" }
+  },
+  {
+    mode: "choice", icon: "🔫", link: "e-rise-shooting-choice-game.html", accent: "#8e6bb0",
+    ribbon: { en: "EASY", jp: "かんたん" },
+    title: { en: "Shooting — Tap & Play", jp: "射的 — タップ版" },
+    desc: { en: "Listen to the word, then tap the matching prize to fire your shot. No typing!", jp: "単語を聞いて、合う景品をタップして発射しよう。タイピング不要！" }
+  }
+  // 👉 Example of a 7th game you could add later:
+  // {
+  //   mode: "choice", icon: "🥎", link: "e-rise-toss-choice-game.html", accent: "#8e6bb0",
+  //   ribbon: { en: "COMING SOON", jp: "近日公開" },
+  //   title: { en: "e-Rise Beanbag Toss", jp: "e-Rise お手玉投げ" },
+  //   desc: { en: "Description here...", jp: "説明文をここに..." }
+  // }
+];
+
+/* ---- 3. MEDIA (photos, posters, and videos) ----
+   👉 TO ADD A PHOTO OR POSTER:
+      { type: "image", src: "photos/booth1.jpg", alt: "...", caption: {en:"...", jp:"..."} }
+   👉 TO ADD A YOUTUBE VIDEO (just paste the video ID from the YouTube URL):
+      { type: "youtube", id: "dQw4w9WgXcQ", caption: {en:"...", jp:"..."} }
+   👉 TO ADD YOUR OWN VIDEO FILE (e.g. an mp4 saved next to this page):
+      { type: "video", src: "videos/highlight.mp4", caption: {en:"...", jp:"..."} }
+   Leave src/id as "" to show a placeholder frame (handy while planning). */
+const MEDIA = [
+  { type: "image", src: "", alt: "Festival photo 1", caption: { en: "Add a photo here", jp: "ここに写真を追加" } },
+  { type: "image", src: "", alt: "Festival photo 2", caption: { en: "Add a photo here", jp: "ここに写真を追加" } },
+  { type: "youtube", id: "", caption: { en: "Add a YouTube video ID here", jp: "ここにYouTube動画IDを追加" } }
+  // 👉 Add as many more entries as you like, mixing images and videos freely.
+];
+
+/* ---- 4. CONTACT & SOCIAL ----
+   Fill in your real details here. These values are the same in both
+   languages (addresses/phone numbers aren't usually translated). */
+const CONTACT = {
+  address: "Kuzuha, Hirakata City, Osaka — please add your full address",
+  phone: "Please add your phone number",
+  email: "Please add your email",
+  website: "https://www.erise-school.com/",
+  enrollLink: "https://www.erise-school.com/"   // used by all three "Enroll" buttons
+};
+const SOCIAL = [
+  // { icon: "📘", label: "Facebook", url: "#" },
+  // { icon: "📷", label: "Instagram", url: "#" },
+  // 👉 Uncomment and fill in the links you actually use — leave empty to hide this row.
+];
+
+/* ================================================================
+   ⚙️ RENDER ENGINE — you shouldn't need to edit anything below this.
+   ================================================================ */
+let currentLang = 'en';
+
+function toggleLang(){
+  currentLang = currentLang === 'en' ? 'jp' : 'en';
+  renderPage();
+}
+
+function renderPage(){
+  const L = LANG[currentLang];
+  document.documentElement.lang = currentLang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(L[key] !== undefined) el.textContent = L[key];
+  });
+
+  document.getElementById('langToggleBtn').textContent = L.langButton;
+  document.getElementById('enrollBtnTop').textContent = L.enrollBtnTop;
+  document.getElementById('enrollBtnAbout').textContent = L.enrollBtn;
+  [document.getElementById('enrollBtnTop'), document.getElementById('enrollBtnHero'), document.getElementById('enrollBtnAbout')]
+    .forEach(el => el.setAttribute('href', CONTACT.enrollLink));
+
+  document.getElementById('addressLabel').textContent = L.addressLabel;
+  document.getElementById('phoneLabel').textContent = L.phoneLabel;
+  document.getElementById('emailLabel').textContent = L.emailLabel;
+  document.getElementById('websiteLabel').textContent = L.websiteLabel;
+  document.getElementById('addressValue').textContent = CONTACT.address;
+  document.getElementById('phoneValue').textContent = CONTACT.phone;
+  document.getElementById('emailValue').textContent = CONTACT.email;
+  document.getElementById('websiteValue').textContent = CONTACT.website;
+
+  const fl = document.getElementById('featureList');
+  fl.innerHTML = '';
+  L.features.forEach(f=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="tick">✓</span><span>${f}</span>`;
+    fl.appendChild(li);
+  });
+
+  renderGames(L);
+  renderMedia(L);
+}
+
+function renderGames(L){
+  const typeGrid = document.getElementById('gameGridType');
+  const choiceGrid = document.getElementById('gameGridChoice');
+  typeGrid.innerHTML = '';
+  choiceGrid.innerHTML = '';
+  GAMES.forEach(g=>{
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.innerHTML = `
+      <div class="ribbon" style="background:${g.accent};">${g.ribbon[currentLang]}</div>
+      <div class="icon">${g.icon}</div>
+      <h3>${g.title[currentLang]}</h3>
+      <p>${g.desc[currentLang]}</p>
+      <a class="btn" href="${g.link}" target="_blank"
+         style="background:linear-gradient(180deg, ${g.accent}, color-mix(in srgb, ${g.accent} 65%, black));
+                box-shadow:0 5px 0 color-mix(in srgb, ${g.accent} 45%, black), 0 8px 16px rgba(0,0,0,.3);">
+        ${L.playNow}
+      </a>`;
+    (g.mode === 'choice' ? choiceGrid : typeGrid).appendChild(card);
+  });
+}
+
+function renderMedia(L){
+  const grid = document.getElementById('mediaGrid');
+  grid.innerHTML = '';
+  MEDIA.forEach(m=>{
+    const item = document.createElement('div');
+    item.className = 'media-item';
+    let inner = '📷';
+    if(m.type === 'image' && m.src){
+      inner = `<img src="${m.src}" alt="${m.alt || ''}">`;
+    } else if(m.type === 'video' && m.src){
+      inner = `<video src="${m.src}" controls></video>`;
+    } else if(m.type === 'youtube' && m.id){
+      inner = `<iframe src="https://www.youtube.com/embed/${m.id}" allowfullscreen title="video"></iframe>`;
+    } else if(m.type === 'youtube' || m.type === 'video'){
+      inner = '▶️';
+    }
+    item.innerHTML = `
+      <div class="media-frame">${inner}</div>
+      <div class="media-caption">${m.caption ? m.caption[currentLang] : ''}</div>`;
+    grid.appendChild(item);
+  });
+}
+
+/* Decorative starfield + bokeh + drifting festival emoji, purely visual */
+(function makeStars(){
+  const field = document.getElementById('stars');
+  for(let i=0;i<70;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random()*2+1;
+    s.style.width = size+'px'; s.style.height = size+'px';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*3)+'s';
+    field.appendChild(s);
+  }
+})();
+(function makeBokeh(){
+  const field = document.getElementById('bokeh');
+  const colors = ['#e8425a','#ffb833','#2fc4b2','#ff6fa5'];
+  for(let i=0;i<10;i++){
+    const g = document.createElement('div');
+    g.className = 'glow';
+    const size = 90 + Math.random()*150;
+    g.style.width = size+'px'; g.style.height = size+'px';
+    g.style.left = Math.random()*100+'%';
+    g.style.top = Math.random()*100+'%';
+    g.style.background = colors[i % colors.length];
+    field.appendChild(g);
+  }
+})();
+(function makeFloaters(){
+  const field = document.getElementById('floaters');
+  const emojis = ['🏮','🎐','🐠','🎆','🌸','🎏'];
+  for(let i=0;i<14;i++){
+    const f = document.createElement('div');
+    f.className = 'floater';
+    f.textContent = emojis[i % emojis.length];
+    f.style.left = Math.random()*100+'%';
+    f.style.animationDuration = (14 + Math.random()*10)+'s';
+    f.style.animationDelay = (Math.random()*14)+'s';
+    field.appendChild(f);
+  }
+})();
+
+/* Social row */
+(function renderSocial(){
+  const row = document.getElementById('socialRow');
+  if(SOCIAL.length){
+    SOCIAL.forEach(s=>{
+      const a = document.createElement('a');
+      a.href = s.url; a.title = s.label; a.textContent = s.icon;
+      a.target = "_blank"; a.rel = "noopener";
+      row.appendChild(a);
+    });
+  } else {
+    row.style.display = 'none';
+  }
+})();
+
+renderPage();
+</script>
+</body>
+</html>
