@@ -80,7 +80,7 @@
     100%{transform:translateY(-115vh) rotate(25deg);opacity:0;}
   }
 
-  #lanterns{position:absolute;top:127px;left:0;width:100%;display:flex;justify-content:space-around;z-index:1;pointer-events:none;}
+  #lanterns{position:absolute;top:67px;left:0;width:100%;display:flex;justify-content:space-around;z-index:1;pointer-events:none;}
   .lantern{width:32px;height:42px;border-radius:50% 50% 45% 45%;position:relative;box-shadow:0 0 16px 3px rgba(255,184,51,.5);animation:sway 3.4s ease-in-out infinite;}
   .lantern:nth-child(4n+1){background:radial-gradient(circle at 35% 30%, #ff8f8f, var(--lantern) 60%, var(--lantern-dark));animation-delay:.2s;}
   .lantern:nth-child(4n+2){background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, #c9822a);animation-delay:.5s;}
@@ -235,6 +235,13 @@
   @media (max-width:600px){
     #topbar{flex-direction:column;gap:14px;}
     #hero .hero-emoji-left, #hero .hero-emoji-right{display:none;}
+    .btn{padding:12px 22px;} /* slightly larger tap target on touch screens */
+  }
+  @media (max-width:480px){
+    #bunting{gap:0;}
+    .flag{width:16px;height:20px;}
+    #hero{padding-top:70px;}
+    .game-card{padding:22px 16px;}
   }
 </style>
 </head>
